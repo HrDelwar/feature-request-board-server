@@ -22,16 +22,18 @@ export const handleFeatureAdd = async (req, res) => {
 };
 export const getAllFeatureRequest = async (req, res) => {
   try {
-    const features = await Feature.find()
+    const features = await Feature.find({})
       .populate('userId', '-__v -password -email')
       .populate('comments.user', '-__v -password -email');
-    if (!features) {
+
+    if (!features.length > 0) {
       return sendResponse(res, 404, {
         name: 'NOT FOUND',
         success: false,
         message: `feature not found`,
       });
     }
+
     return sendResponse(res, 200, {
       name: 'OK',
       success: true,

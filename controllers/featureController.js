@@ -1,5 +1,5 @@
 import models from '../models';
-import { sendResponse } from '../utils/helperFunction';
+import { isAdmin, sendResponse } from '../utils/helperFunction';
 const { Feature } = models;
 
 export const handleFeatureAdd = async (req, res) => {
@@ -138,5 +138,46 @@ export const featureBySearchName = async (req, res) => {
     }
   } catch (err) {
     return sendResponse(res, 500, { success: false, message: err.message });
+  }
+};
+
+export const changeStatus = async (req, res) => {
+  const { _id, status } = req.body;
+
+  if (!isAdmin(req)) {
+    return sendResponse(res, 403, {
+      name: 'denied',
+      message: 'access denied',
+      success: false,
+    });
+  }
+
+  try {
+    const updatedFeature = await Feature.findOneAndUpdate(
+      { _id },
+      { status },
+      {
+        new: true,
+      }
+    );
+    if (!updatedFeature) {
+      return sendResponse(res, 403, {
+        name: 'Forbidden',
+        success: false,
+        message: 'feature not found',
+      });
+    }
+    return sendResponse(res, 200, {
+      name: 'OK',
+      success: true,
+      message: `feature update successfully!`,
+      feature: updatedFeature,
+    });
+  } catch (err) {
+    return sendResponse(res, 500, {
+      name: 'Internal Server Error',
+      message: err.message,
+      success: false,
+    });
   }
 };

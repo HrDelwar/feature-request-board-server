@@ -26,6 +26,9 @@ app.use('/auth', routes.authRoutes);
 // feature routes config
 app.use('/feature', routes.featureRoutes);
 
+// form routes config
+app.use('/form', routes.formRoutes);
+
 // root response
 app.get('/', (req, res) => {
   res.send('Hello World!');

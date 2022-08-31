@@ -20,7 +20,8 @@
 
 ## Technology
 
-- Node.js
+- Node-JS
+- React-JS
 - MongoDB
 - Mongoose
 
